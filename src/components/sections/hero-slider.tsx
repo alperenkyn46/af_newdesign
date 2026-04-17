@@ -5,11 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
-  Trophy,
   Gift,
   ChevronLeft,
   ChevronRight,
-  Crown,
   ArrowRight,
   Star,
   ShieldCheck,
@@ -27,8 +25,7 @@ const slides = [
     title: "Güvenilir Bahis Siteleri",
     titleHighlight: "Tek Çatı Altında",
     description:
-      "50+ lisanslı siteden seçilmiş bonuslar, detaylı incelemeler ve güvenilir yönlendirmeler.",
-    stat: { value: "50+", label: "Aktif bahis sitesi" },
+      "Lisanslı sitelerden seçilmiş bonuslar, detaylı incelemeler ve güvenilir yönlendirmeler.",
     features: ["Güncel bonuslar", "Detaylı incelemeler", "Güvenli siteler"],
     cta: { text: "Siteleri Keşfet", href: "/siteler" },
     ctaSecondary: { text: "Üye Ol", href: "/kayit" },
@@ -42,7 +39,6 @@ const slides = [
     titleHighlight: "Bir Adım Öndesin",
     description:
       "Özel bonuslar, öncelikli destek ve kişiye özel fırsatlarla premium deneyim.",
-    stat: { value: "VIP", label: "Ayrıcalıklı üyelik" },
     features: ["Özel etkinlikler", "VIP masalar", "Kişisel danışman"],
     cta: { text: "VIP Ol", href: "/panel/vip" },
     ctaSecondary: { text: "Detaylar", href: "/panel/vip" },
@@ -56,7 +52,6 @@ const slides = [
     titleHighlight: "Seni Bekliyor",
     description:
       "Slot, çark ve günlük ödüllerle her gün puan kazan, harca ve kazançlı çık.",
-    stat: { value: "₺1M+", label: "Toplam ödül havuzu" },
     features: ["Slot oyunları", "Çark çevir", "Günlük bonuslar"],
     cta: { text: "Şansını Dene", href: "/oyunlar" },
     ctaSecondary: { text: "Oyunlara Git", href: "/oyunlar" },
@@ -128,25 +123,10 @@ export function HeroSlider() {
               </p>
             </div>
 
-            {/* Stat strip */}
-            <div
-              className="flex items-center gap-4 animate-slideUp"
-              style={{ animationDelay: "0.1s" }}
-            >
-              <div className="flex items-baseline gap-2">
-                <span className="text-5xl md:text-6xl font-black text-ink tracking-tight">
-                  {slide.stat.value}
-                </span>
-                <span className="text-sm md:text-base text-ink-soft font-medium">
-                  {slide.stat.label}
-                </span>
-              </div>
-            </div>
-
             {/* Feature pills */}
             <div
               className="flex flex-wrap gap-2 animate-slideUp"
-              style={{ animationDelay: "0.2s" }}
+              style={{ animationDelay: "0.1s" }}
             >
               {slide.features.map((feature, idx) => (
                 <div
@@ -162,7 +142,7 @@ export function HeroSlider() {
             {/* CTAs */}
             <div
               className="flex gap-3 pt-2 animate-slideUp"
-              style={{ animationDelay: "0.3s" }}
+              style={{ animationDelay: "0.2s" }}
             >
               <Link href={slide.cta.href}>
                 <Button variant="primary" size="lg" className="group">
@@ -180,7 +160,7 @@ export function HeroSlider() {
             {/* Trust badges */}
             <div
               className="hidden md:flex items-center gap-5 pt-3 animate-fadeIn"
-              style={{ animationDelay: "0.4s" }}
+              style={{ animationDelay: "0.3s" }}
             >
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
@@ -217,28 +197,28 @@ export function HeroSlider() {
               <div className="grid grid-cols-2 gap-3 p-4 md:p-5 border-t border-line bg-white">
                 {[
                   {
-                    icon: Trophy,
-                    value: "50+",
-                    label: "Bahis Sitesi",
-                    tint: "text-primary-700 bg-primary-50",
-                  },
-                  {
                     icon: Gift,
                     value: "100+",
                     label: "Aktif Bonus",
                     tint: "text-emerald-700 bg-emerald-50",
                   },
                   {
-                    icon: Crown,
-                    value: "10K+",
-                    label: "VIP Üye",
-                    tint: "text-amber-700 bg-amber-50",
+                    icon: ShieldCheck,
+                    value: "%100",
+                    label: "Lisans Kontrolü",
+                    tint: "text-primary-700 bg-primary-50",
                   },
                   {
                     icon: Zap,
-                    value: "₺1M+",
-                    label: "Toplam Kazanç",
+                    value: "7/24",
+                    label: "Canlı Destek",
                     tint: "text-orange-700 bg-orange-50",
+                  },
+                  {
+                    icon: Star,
+                    value: "4.9/5",
+                    label: "Memnuniyet",
+                    tint: "text-amber-700 bg-amber-50",
                   },
                 ].map((stat, idx) => (
                   <div
