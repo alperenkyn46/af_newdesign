@@ -51,23 +51,23 @@ export function Header() {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 lg:h-18">
+        <div className="flex items-center justify-between h-18 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             {siteLogo ? (
               <Image
                 src={siteLogo}
                 alt={siteName}
-                width={40}
-                height={40}
-                className="w-10 h-10 rounded-lg object-contain"
+                width={48}
+                height={48}
+                className="w-11 h-11 lg:w-12 lg:h-12 rounded-xl object-contain"
               />
             ) : (
-              <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center shadow-brand-sm">
-                <Trophy className="w-5 h-5 text-white" />
+              <div className="w-11 h-11 lg:w-12 lg:h-12 rounded-xl bg-gradient-primary flex items-center justify-center shadow-brand-sm">
+                <Trophy className="w-5 h-5 lg:w-5.5 lg:h-5.5 text-white" />
               </div>
             )}
-            <span className="text-xl font-bold text-ink tracking-tight">
+            <span className="text-[1.35rem] lg:text-2xl font-bold text-ink tracking-tight">
               {siteName}
             </span>
           </Link>
