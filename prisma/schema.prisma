@@ -1,0 +1,224 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  password         String
+  name             String
+  telegramUsername String?
+  referralCode     String         @unique
+  totalPoints      Int            @default(0)
+  vipLevel         String         @default("bronze")
+  isAdmin          Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  dailyRewards     DailyReward[]
+  depositProofs    DepositProof[]
+  points           Point[]
+  redemptions      Redemption[]
+  referredBy       Referral?      @relation("ReferredBy")
+  referralsMade    Referral[]     @relation("ReferralsMade")
+  sessions         Session[]
+  slotGames        SlotGame[]
+  socialFollows    SocialFollow[]
+  wheelSpins       WheelSpin[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BettingSite {
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  logo          String
+  url           String
+  description   String
+  rating        Float          @default(0)
+  features      String
+  isFeatured    Boolean        @default(false)
+  sponsorTier   String         @default("premium")
+  isActive      Boolean        @default(true)
+  order         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  bonuses       Bonus[]
+  depositProofs DepositProof[]
+  redemptions   Redemption[]
+}
+
+model Bonus {
+  id          String      @id @default(cuid())
+  siteId      String
+  title       String
+  code        String?
+  description String
+  type        String
+  value       String
+  minDeposit  String?
+  wagering    String?
+  expiresAt   DateTime?
+  showInLatest Boolean    @default(true)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  site        BettingSite @relation(fields: [siteId], references: [id], onDelete: Cascade)
+}
+
+model Point {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Referral {
+  id           String   @id @default(cuid())
+  referrerId   String
+  referredId   String   @unique
+  pointsEarned Int      @default(100)
+  createdAt    DateTime @default(now())
+  referred     User     @relation("ReferredBy", fields: [referredId], references: [id], onDelete: Cascade)
+  referrer     User     @relation("ReferralsMade", fields: [referrerId], references: [id], onDelete: Cascade)
+}
+
+model DailyReward {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String
+  points    Int
+  streak    Int      @default(1)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model WheelSpin {
+  id        String   @id @default(cuid())
+  userId    String
+  prize     String
+  points    Int
+  date      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model SocialFollow {
+  id        String   @id @default(cuid())
+  userId    String
+  platform  String
+  points    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform])
+}
+
+model SlotGame {
+  id        String   @id @default(cuid())
+  userId    String
+  bet       Int
+  result    String
+  winAmount Int
+  symbols   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Redemption {
+  id        String      @id @default(cuid())
+  userId    String
+  siteId    String
+  points    Int
+  amount    String
+  status    String      @default("pending")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  site      BettingSite @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VipLevel {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  minPoints       Int
+  maxPoints       Int
+  bonusMultiplier Float    @default(1.0)
+  dailyBonus      Int      @default(10)
+  wheelBonus      Int      @default(0)
+  slotBonus       Int      @default(0)
+  color           String   @default("#CD7F32")
+  createdAt       DateTime @default(now())
+}
+
+model WheelPrize {
+  id          String  @id @default(cuid())
+  name        String
+  points      Int
+  probability Int
+  color       String
+  isActive    Boolean @default(true)
+  order       Int     @default(0)
+}
+
+model DepositProof {
+  id        String      @id @default(cuid())
+  userId    String
+  siteId    String
+  imageUrl  String
+  amount    String?
+  status    String      @default("pending")
+  points    Int         @default(100)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  site      BettingSite @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SiteSettings {
+  id                 String   @id @default(cuid())
+  siteName           String   @default("BetVIP")
+  siteLogo           String?
+  siteDescription    String   @default("En iyi bahis siteleri ve bonuslar")
+  telegramLink       String?
+  instagramLink      String?
+  twitterLink        String?
+  kickLink           String?
+  eventChannelLink   String?
+  youtubeLink        String?
+  footerTelegramLink String?
+  footerInstagramLink String?
+  footerKickLink     String?
+  footerDiscordLink  String?
+  footerEventLink    String?
+  footerYoutubeLink  String?
+  contactEmail       String?
+  pointsPerSignup    Int      @default(50)
+  pointsPerReferral  Int      @default(100)
+  pointsPerTelegram  Int      @default(50)
+  pointsPerInstagram Int      @default(30)
+  pointsPerTwitter   Int      @default(30)
+  pointsPerYoutube   Int      @default(40)
+  pointsPerDeposit   Int      @default(100)
+  dailyBonusBase     Int      @default(10)
+  slotMinBet         Int      @default(10)
+  slotMaxBet         Int      @default(1000)
+  updatedAt          DateTime @updatedAt
+}
